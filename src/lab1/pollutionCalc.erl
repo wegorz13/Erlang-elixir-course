@@ -27,7 +27,7 @@ calculate_max([], _) -> none;
 calculate_max(Readings, Type) ->
   Values = get_values(Readings, Type),
   case Values of
-    [] -> none;
+    [] -> {error, "nieistniejacy pomiar"};
     _ -> lists:max(Values)
   end.
 
@@ -35,7 +35,7 @@ calculate_mean([], _) -> none;
 calculate_mean(Readings, Type) ->
   Values = get_values(Readings, Type),
   case Values of
-    [] -> none;
+    [] -> {error, "nieistniejacy pomiar"};
     _ -> lists:sum(Values)/length(Values)
   end.
 
