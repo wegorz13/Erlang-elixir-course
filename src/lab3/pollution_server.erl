@@ -1,11 +1,84 @@
--module(pollution).
--export([start/0, add_station/3, add_value/5, remove_value/4, get_one_value/4, get_station_min/3, get_daily_mean/3, get_daily_average_data_count/1]).
+-module(pollution_server).
+
+-export([add_station/2, add_value/4, remove_value/3, get_one_value/3, get_station_min/2, get_daily_mean/2, get_daily_average_data_count/0, start/0, stop/0]).
 
 -record(measurement, {type, cords, date, value}).
 
-%% monitor structure: Map(key(type, cords) => [..measurement])
-%% date structure: {{year,month,day}, {hour,minute,second}}
-start() -> #{}.
+start()->
+  register(server, spawn(fun() -> init() end)).
+
+stop()->
+  server ! stop.
+
+init()->
+  State = create_monitor(),
+  loop(State).
+
+add_station(Name, Cords) ->
+  server ! {add_station, self(), {Name, Cords}},
+  receive Result -> Result end.
+
+add_value(Identifier, Date, Type, Value) ->
+  server ! {add_value, self(), {Identifier, Date, Type, Value}},
+  receive Result -> Result end.
+
+remove_value(Identifier, Date, Type) ->
+  server ! {remove_value, self(), {Identifier, Date, Type}},
+  receive Result -> Result end.
+
+get_one_value(Identifier, Date, Type) ->
+  server ! {get_one_value, self(), {Identifier, Date, Type}},
+  receive Result -> Result end.
+
+get_station_min(Identifier, Type) ->
+  server ! {get_station_min, self(), {Identifier, Type}},
+  receive Result -> Result end.
+
+get_daily_mean(Type, Date) ->
+  server ! {get_daily_mean, self(), {Type, Date}},
+  receive Result -> Result end.
+
+get_daily_average_data_count() ->
+  server ! {get_daily_average_data_count, self()},
+  receive Result -> Result end.
+
+loop(State)->
+  receive
+    stop ->
+      io:format("Stopping server~n"),
+      ok;
+    {add_station, SenderPID, {Name, Cords}} ->
+      handle_change_of_state_call(fun add_station/3, [Name, Cords], State, SenderPID);
+    {add_value, SenderPID, {Identifier, Date, Type, Value}} ->
+      handle_change_of_state_call(fun add_value/5, [Identifier, Date, Type, Value], State, SenderPID);
+    {remove_value, SenderPID, {Identifier, Date, Type}} ->
+      handle_change_of_state_call(fun remove_value/4, [Identifier, Date, Type], State, SenderPID);
+    {get_one_value, SenderPID, {Identifier, Date, Type}} ->
+      SenderPID ! get_one_value(Identifier, Date, Type, State),
+      loop(State);
+    {get_station_min, SenderPID, {Identifier, Type}} ->
+      SenderPID ! get_station_min(Identifier, Type, State),
+      loop(State);
+    {get_daily_mean, SenderPID, {Identifier, Type}} ->
+      SenderPID ! get_daily_mean(Identifier, Type, State),
+      loop(State);
+    {get_daily_average_data_count, SenderPID} ->
+      SenderPID ! get_daily_average_data_count(State),
+      loop(State)
+  end.
+
+handle_change_of_state_call(Server_function, Args_list, State, SenderPID)->
+  case apply(Server_function, Args_list ++ [State]) of
+    {error, Msg} ->
+      io:format("ERROR: ~s. ~n", [Msg]),
+      SenderPID ! {error, Msg},
+      loop(State);
+    New_state ->
+      SenderPID ! New_state,
+      loop(New_state)
+  end.
+
+create_monitor() -> #{}.
 
 add_station(Name, Cords, Monitor) ->
   Station_by_name = lists:keyfind(Name, 1, maps:keys(Monitor)),
