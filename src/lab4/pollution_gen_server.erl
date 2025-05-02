@@ -55,7 +55,7 @@ handle_cast({add_station, Name, Cords}, State) ->
       {noreply, State};
     New_state ->
       {noreply, New_state}
-  end.
+  end;
 
 handle_cast({add_value, Identifier, Date, Type, Value}, State) ->
   case pollution:add_value(Identifier, Date, Type, Value, State) of
@@ -64,7 +64,7 @@ handle_cast({add_value, Identifier, Date, Type, Value}, State) ->
       {noreply, State};
     New_state ->
       {noreply, New_state}
-  end.
+  end;
 
 handle_cast({remove_value, Identifier, Date, Type}, State) ->
   case pollution:remove_value(Identifier, Date, Type, State) of
@@ -73,22 +73,22 @@ handle_cast({remove_value, Identifier, Date, Type}, State) ->
       {noreply, State};
     New_state ->
       {noreply, New_state}
-  end.
+  end;
 
 handle_cast(stop, State) ->
   {stop, normal, State}.
 
 handle_call({get_one_value, Identifier, Date, Type}, _From, State) ->
   Value = pollution:get_one_value(Identifier, Date, Type, State),
-  {reply, Value, State}.
+  {reply, Value, State};
 
 handle_call({get_station_min, Identifier, Type}, _From, State) ->
   Value = pollution:get_station_min(Identifier, Type, State),
-  {reply, Value, State}.
+  {reply, Value, State};
 
 handle_call({get_daily_mean, Type, Date}, _From, State) ->
   Value = pollution:get_daily_mean(Type, Date, State),
-  {reply, Value, State}.
+  {reply, Value, State};
 
 handle_call({get_daily_average_data_count}, _From, State) ->
   Value = pollution:get_daily_average_data_count(State),

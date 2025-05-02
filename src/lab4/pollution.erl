@@ -14,6 +14,7 @@ add_station(Name, Cords, Monitor) ->
     true -> {error, "the station already exists"}
   end.
 
+
 add_value(Identifier, Date, Type, Value, Monitor)->
   case find_station(Identifier, maps:keys(Monitor)) of
     {error, Msg} -> {error, Msg};
