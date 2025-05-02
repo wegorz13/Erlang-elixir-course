@@ -10,4 +10,4 @@ The course is still ongoing, therefore more laboratories will be added soon.
 
 ### [Lab 3 - Processes, server](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab3)
 
-### [Lab 4 - OTP (gen_server, supervisor, gen_statem, application)](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab3)
+### [Lab 4 - OTP (gen_server, supervisor, gen_statem, application)](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab4)
