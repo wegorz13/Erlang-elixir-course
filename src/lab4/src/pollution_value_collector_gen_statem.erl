@@ -26,7 +26,7 @@ add_value(Date, Type, Value)->
 store_data()->
   gen_statem:cast(?SERVER_NAME, {save_data}).
 
-no_station_set(_Event, {set_station, Identifier}, State = #state)->
+no_station_set(_Event, {set_station, Identifier}, #state{} = State)->
   case pollution:find_station(Identifier, State#state.monitor) of
     {error, Msg} ->
       io:format("ERROR: ~s. ~n", [Msg]),
@@ -35,13 +35,13 @@ no_station_set(_Event, {set_station, Identifier}, State = #state)->
       {next_state, station_set, State#state{station = Station}}
   end.
 
-station_set(_Event, {add_value, Date, Type, Value}, State = #state)->
+station_set(_Event, {add_value, Date, Type, Value}, #state{} = State)->
   {_, Cords} = State#state.station,
   New_measurement = #measurement{type = Type, cords = Cords, date = Date, value = Value },
   Updated_measurements = [New_measurement | State#state.new_measurements],
   {keep_state, State#state{new_measurements = Updated_measurements}};
 
-station_set(_Event, {save_data}, State = #state)->
+station_set(_Event, {save_data}, #state{} = State)->
   Updated_monitor = push_data(State#state.new_measurements, State#state.monitor),
   {next_state, no_station_set, #state{monitor = Updated_monitor}}.
 
@@ -62,3 +62,6 @@ terminate(Reason, State, Data) ->
 
 callback_mode() ->
   state_functions.
+
+'StateName'(_, OldStateName, _) ->
+  erlang:error(not_implemented).

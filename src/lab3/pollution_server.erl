@@ -156,20 +156,31 @@ get_daily_mean(Type, Date, Monitor)->
     _  -> lists:foldl(Sum_values, 0, Measurements) / length(Measurements)
   end.
 
+
 get_daily_average_data_count(Monitor) ->
-  Unique_days = fun (#measurement{type=_, cords=_, date= {Date, _}, value=_}, Acc) ->
-    case lists:member(Date,Acc) of
+  Unique_days = fun (#measurement{date= {Date, _}}, Acc) ->
+    case lists:member(Date, Acc) of
       true -> Acc;
       false -> [Date | Acc]
     end end,
+
   Day_average = fun (_, Measurements) ->
     case Measurements of
       [] -> 0;
-      _ -> length(Measurements)/length(lists:foldl(Unique_days, [], Measurements))
+      _ ->
+        Unique = lists:foldl(Unique_days, [], Measurements),
+        case length(Unique) of
+          0 -> 0;
+          Count -> length(Measurements) / Count
+        end
     end end,
 
   Average_per_station = maps:map(Day_average, Monitor),
-  lists:sum(maps:values(Average_per_station))/map_size(Average_per_station).
+
+  case map_size(Average_per_station) of
+    0 -> 0;
+    N -> lists:sum(maps:values(Average_per_station)) / N
+  end.
 
 find_station(Identifier, [{Identifier, Cords} | _]) ->
   {Identifier,Cords};

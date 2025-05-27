@@ -1,7 +1,7 @@
 -module(pollution).
 -author("filip").
 
--export([]).
+-export([create_monitor/0, add_value/5, add_station/3, get_daily_average_data_count/1, remove_value/4, get_one_value/4, get_daily_mean/3, get_station_min/3]).
 
 -record(measurement, {type, cords, date, value}).
 
