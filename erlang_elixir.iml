@@ -4,6 +4,9 @@
     <facet type="erlang" name="Erlang">
       <configuration />
     </facet>
+    <facet type="Elixir" name="Elixir">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
