@@ -1,6 +1,4 @@
-# Tasks from my Erlang & Elixir programming course at AGH UST.
-
-The course is still ongoing, therefore more laboratories will be added soon.
+# Laboratories from my Erlang & Elixir programming course at AGH UST.
 
 ## Erlang
 
@@ -15,3 +13,5 @@ The course is still ongoing, therefore more laboratories will be added soon.
 ### [Lab 5 - Elixir introduction](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab5)
 
 ### [Lab 6 - Elixir Ecto](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab6)
+
+### [Lab 7 - Elixir Phoenix](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/pollutiondb)
