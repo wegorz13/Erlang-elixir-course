@@ -28,3 +28,28 @@ _checkouts/
  # === OS/System files ===
  .DS_Store
  Thumbs.db
+
+ # Elixir build artifacts
+ /_build
+ /deps
+ /cover
+ /doc
+ /.elixir_ls
+ /.elixir-tools
+
+ # Phoenix specific
+ /node_modules
+ /priv/static/assets
+ /priv/static/cache_manifest.json
+
+ # Mix lockfiles (keep if you want exact versions in CI)
+ # /mix.lock
+
+ # System files
+ *.swp
+ *.swo
+ *.tmp
+ *.bak
+
+ # IDE/editor
+ .vscode/
