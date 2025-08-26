@@ -10,6 +10,8 @@
 
 ### [Lab 4 - OTP (gen_server, supervisor, gen_statem, application)](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab4)
 
+## Elixir
+
 ### [Lab 5 - Elixir introduction](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab5)
 
 ### [Lab 6 - Elixir Ecto](https://github.com/wegorz13/Erlang_elixir_course/tree/master/src/lab6)
